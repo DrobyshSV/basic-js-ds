@@ -42,7 +42,7 @@ class BinarySearchTree {
             if (data > node.data) {
                 return hasNode(node.right, data)
             } else {
-                return  hasNode(node.left, data)
+                return hasNode(node.left, data)
             }
         }
         return hasNode(this.head, data)
@@ -63,7 +63,38 @@ class BinarySearchTree {
     }
 
     remove(data) {
-
+        const removeNode = (node, data) => {
+            if (node === null) {
+                return null
+            } else if (data > node.data) {
+                node.right = removeNode(node.right, data)
+                return node
+            } else if (data < node.data) {
+                node.left = removeNode(node.left, data)
+                return node
+            } else {
+                if (node.left === null && node.right === null) {
+                    return null
+                }
+                if (node.left === null) {
+                    node = node.right
+                    return node
+                }
+                if (node.right === null) {
+                    node = node.left
+                    return node
+                }
+                let maxFromLeft = node.left
+                while (maxFromLeft.right) {
+                    maxFromLeft = maxFromLeft.right
+                }
+                node.data = maxFromLeft.data
+                node.left = removeNode(node.left, maxFromLeft.data)
+                return node
+            }
+            return node
+        }
+        this.head = removeNode(this.head, data)
     }
 
     min() {
